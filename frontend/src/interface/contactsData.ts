@@ -1,6 +1,6 @@
 import IContact from "@/interface/contact";
 
-export default interface IData {
+export default interface IContactsData {
   totalCount: number;
   contacts: IContact[];
 }

@@ -1,0 +1,13 @@
+.list {
+  padding: 0.5rem;
+
+  .item {
+    margin-top: 0.5rem;
+    background-color: grey;
+    padding: 0.5rem;
+
+    .link {
+      display: block;
+    }
+  }
+}

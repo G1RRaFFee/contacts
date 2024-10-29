@@ -1,6 +1,6 @@
-import IData from "@/interface/data";
+import IContactsData from "@/interface/contactsData";
 
 export default interface ISerializer {
-  toFormat(data: IData): string;
-  fromFormat(data: string): IData;
+  toFormat(data: IContactsData): string;
+  fromFormat(data: string): IContactsData;
 }

@@ -1,6 +1,6 @@
 export default interface IContact {
-  id: number;
-  name?: string;
+  id: string;
+  fullname: string;
   phone?: string;
   birthday?: string;
   address?: string;

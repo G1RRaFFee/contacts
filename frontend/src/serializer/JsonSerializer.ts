@@ -1,12 +1,12 @@
 import ISerializer from "@/interface/serializer";
-import IData from "@/interface/data";
+import IContactsData from "@/interface/contactsData";
 
 export class JsonSelializer implements ISerializer {
-  public toFormat(data: IData): string {
-    return JSON.stringify(data);
+  public toFormat(data: IContactsData): string {
+    return JSON.stringify(data, null, 2);
   }
 
-  public fromFormat(data: string): IData {
+  public fromFormat(data: string): IContactsData {
     return JSON.parse(data);
   }
 }

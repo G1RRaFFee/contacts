@@ -29,12 +29,13 @@ export const Form: FC = () => {
   }
 
   async function readFile() {
-    console.log(await service.getAllContacts());
+    // console.log(await service.getAllContacts());
     const contact: IContact = {
       id: 1,
-      name: "PussyEater",
+      fullname: "PussyEater",
     };
     await service.addContact(contact);
+    // await service.ensureContactsFile();
   }
   return (
     <>

@@ -1,7 +1,8 @@
 import { readTextFile, writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
+import { downloadDir } from "@tauri-apps/api/path";
 
 import ISerializer from "@/interface/serializer";
-import IData from "@/interface/data";
+import IData from "@/interface/contactsData";
 
 export class Storage {
   private serializer: ISerializer;
@@ -13,7 +14,8 @@ export class Storage {
   public async save(data: IData): Promise<void> {
     try {
       const contents = this.serializer.toFormat(data);
-      await writeTextFile("Contacts.json", contents, {
+      const path = await downloadDir();
+      await writeTextFile(`${path}/Contacts/contacts.json`, contents, {
         dir: BaseDirectory.Download,
       });
     } catch (error) {
@@ -23,9 +25,8 @@ export class Storage {
 
   public async load() {
     try {
-      const data = await readTextFile("Contacts.json", {
-        dir: BaseDirectory.Download,
-      });
+      const path = await downloadDir();
+      const data = await readTextFile(`${path}/Contacts/contacts.json`);
       return this.serializer.fromFormat(data);
     } catch (error) {
       console.log(error);
