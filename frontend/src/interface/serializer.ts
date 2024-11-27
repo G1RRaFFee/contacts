@@ -1,6 +1,6 @@
-import IContactsData from "@/interface/contactsData";
+import { DeserializedContactsData } from "@/interface/contactsData";
 
-export default interface ISerializer {
-  toFormat(data: IContactsData): string;
-  fromFormat(data: string): IContactsData;
+export interface Serializer {
+  toFormat(data: DeserializedContactsData): string;
+  fromFormat(data: string): DeserializedContactsData;
 }

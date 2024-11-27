@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
+"use client";
+
+import "reflect-metadata";
 import "./globals.css";
 
 import { ContactsList } from "@/components/shared";
-export const metadata: Metadata = {
-  title: "Contacts",
-};
 
 export default function RootLayout({
   children,
@@ -13,7 +12,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body
+        style={{
+          display: "flex",
+          position: "relative",
+          height: "100vh",
+        }}
+      >
         <ContactsList />
         {children}
       </body>

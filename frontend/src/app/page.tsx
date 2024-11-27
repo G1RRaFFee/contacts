@@ -1,5 +1,9 @@
-import { Form } from "@/components/shared";
+import styles from "./page.module.scss";
 
 export default function Home() {
-  return <Form />;
+  return (
+    <main className={styles.layout}>
+      <p>Выберите, кому хотели бы добавить заметку.</p>
+    </main>
+  );
 }

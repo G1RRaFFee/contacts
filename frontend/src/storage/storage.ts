@@ -1,29 +1,33 @@
-import { readTextFile, writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
+import {
+  readTextFile,
+  writeTextFile,
+  BaseDirectory,
+} from "@tauri-apps/plugin-fs";
 import { downloadDir } from "@tauri-apps/api/path";
 
-import ISerializer from "@/interface/serializer";
-import IData from "@/interface/contactsData";
+import { Serializer } from "@/interface/serializer";
+import { DeserializedContactsData } from "@/interface/contactsData";
 
 export class Storage {
-  private serializer: ISerializer;
+  private serializer: Serializer;
 
-  constructor(serializer: ISerializer) {
+  constructor(serializer: Serializer) {
     this.serializer = serializer;
   }
 
-  public async save(data: IData): Promise<void> {
+  public async save(data: DeserializedContactsData): Promise<void> {
     try {
       const contents = this.serializer.toFormat(data);
       const path = await downloadDir();
       await writeTextFile(`${path}/Contacts/contacts.json`, contents, {
-        dir: BaseDirectory.Download,
+        baseDir: BaseDirectory.Download,
       });
     } catch (error) {
       console.log(error);
     }
   }
 
-  public async load() {
+  public async load(): Promise<DeserializedContactsData | undefined> {
     try {
       const path = await downloadDir();
       const data = await readTextFile(`${path}/Contacts/contacts.json`);

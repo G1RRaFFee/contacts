@@ -1,36 +1,39 @@
 "use client";
 
+import { FC, useEffect } from "react";
+
 import Link from "next/link";
 
-import { useEffect, useState } from "react";
-import { useContactService } from "@/hooks/contactService";
+import useContactStore from "@/store/contact/contact.store";
 import { Search, SideBar } from "@/components/shared";
-import IContact from "@/interface/contact";
-
 import styles from "./ContactsList.module.scss";
 
-export const ContactsList = () => {
-  const [contacts, setContacts] = useState<IContact[] | undefined>(undefined);
-  const contactService = useContactService();
+export const ContactsList: FC = () => {
+  const { contacts, fetchContacts, deleteContact } = useContactStore();
 
-  async function getAllContacts() {
-    const allContacts = await contactService.getAllContacts();
-    setContacts(allContacts);
-  }
+  const handleDelete = (id: string) => {
+    deleteContact(id);
+  };
 
   useEffect(() => {
-    getAllContacts();
-  }, []);
+    fetchContacts();
+  }, [fetchContacts]);
 
   return (
     <SideBar>
       <Search />
       <ul className={styles.list}>
-        {contacts?.map((contact, index) => (
-          <li className={styles.item} key={index}>
-            <Link className={styles.link} href={`contacts/${contact.id}`}>
-              {contact.fullname}
+        {contacts?.map((contact) => (
+          <li className={styles.item} key={contact.id}>
+            <Link className={styles.link} href={`/contact/${contact.id}`}>
+              {contact.name}
+              <div className={styles.tags}>
+                {contact.tags?.map((tag, index) => (
+                  <span key={index}>{tag}</span>
+                ))}
+              </div>
             </Link>
+            <button onClick={() => handleDelete(contact.id)}>Удалить</button>
           </li>
         ))}
       </ul>

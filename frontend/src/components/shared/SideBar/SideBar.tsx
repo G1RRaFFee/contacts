@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 
-import styles from "./sideBar.module.scss";
+import styles from "./SideBar.module.scss";
 
 interface ISideBar {
   children: ReactNode;

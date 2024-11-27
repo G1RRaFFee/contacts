@@ -1,6 +1,6 @@
-import IContact from "@/interface/contact";
+import { Contact } from "@/interface/contact";
 
-export default interface IContactsData {
-  totalCount: number;
-  contacts: IContact[];
+export interface DeserializedContactsData {
+  contactsCount: number;
+  contacts: Contact[];
 }

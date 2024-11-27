@@ -4,8 +4,8 @@ import styles from "./Search.module.scss";
 
 export const Search: FC = () => {
   return (
-    <div className={styles.searchContainer}>
+    <search className={styles.searchContainer}>
       <input className={styles.searchInput} type="text" />
-    </div>
+    </search>
   );
 };

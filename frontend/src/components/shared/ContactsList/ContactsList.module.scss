@@ -1,13 +1,26 @@
 .list {
+  height: 100%;
   padding: 0.5rem;
-
-  .item {
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  & > :not(:first-child) {
     margin-top: 0.5rem;
+  }
+  .tempItem {
+    padding: 0.5rem 0.5rem 3rem 0.5rem;
+    background-color: red;
+  }
+  .item {
     background-color: grey;
     padding: 0.5rem;
 
     .link {
       display: block;
+      .tags {
+        display: flex;
+        gap: 0.5rem;
+      }
     }
   }
 }
