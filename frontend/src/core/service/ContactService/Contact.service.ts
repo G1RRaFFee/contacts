@@ -27,6 +27,24 @@ export class ContactService {
     return await this.contactRepository.findById(id);
   }
 
+  public async update(id: string, updatedContact: Contact) {
+    await this.contactRepository.update(id, updatedContact);
+  }
+
+  public async getImageById(id: string) {
+    const response = this.contactRepository.getImagesById(id);
+    console.log("Сервис:", response);
+    return response;
+  }
+
+  public async saveImage(id: string, imageData: Buffer, extension: string) {
+    return this.contactRepository.saveImage(id, imageData, extension);
+  }
+
+  public async linkImageToContact(id: string, imagePath: string) {
+    this.contactRepository.linkImageToContact(id, imagePath);
+  }
+
   public generateId(): string {
     return uuidv4();
   }

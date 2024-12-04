@@ -4,8 +4,9 @@ import { ContactController } from "@/infrastructure/Controllers/Contact/ContactC
 import { container } from "@/infrastructure/Di/Container.config";
 import useContactStore from "@/store/contact/contact.store";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import Image from "next/image";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 type FormData = {
   id: string;
@@ -37,29 +38,53 @@ export default function Page() {
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, files } = e.target;
+  const [image, setImage] = useState<File | undefined>(undefined);
+  const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
 
-    if (name === "imageURL" && files) {
-      const file = files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result as string);
-          setFormData({ ...formData, imageURL: reader.result as string });
-        };
-        reader.readAsDataURL(file); // Чтение файла как base64
-      }
-    } else {
-      setFormData({
-        ...formData,
-        [name]: value,
-      });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement & {
+      files: FileList;
+    };
+    const uploadedFile = target.files[0];
+    setImage(uploadedFile);
+
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setPreview(fileReader.result);
+    };
+    fileReader.readAsDataURL(uploadedFile);
+  };
+
+  const saveImageToDisk = async (
+    id: string,
+    file: File
+  ): Promise<string | null> => {
+    if (!file) return null;
+
+    try {
+      const imageData = await file.arrayBuffer();
+      const extension = file.name.split(".").pop() || "png"; // Определяем расширение файла
+      const path = await controller.saveImage(
+        id,
+        Buffer.from(imageData),
+        extension
+      );
+      return path; // Возвращаем путь к сохраненному изображению
+    } catch (error) {
+      console.error("Failed to save image:", error);
+      return null;
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors: { [key: string]: string } = {};
@@ -70,8 +95,18 @@ export default function Page() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      console.log("Form submitted with data:", formData);
-      createContact(formData);
+      let imagePath = null;
+      if (image) {
+        imagePath = await saveImageToDisk(formData.id, image);
+      }
+
+      const contactData = {
+        ...formData,
+        imageURL: imagePath || "",
+      };
+
+      console.log("Form submitted with data:", contactData);
+      createContact(contactData);
       router.push(`/contact/${formData.id}`);
     }
   };
@@ -172,16 +207,20 @@ export default function Page() {
         <label htmlFor="imageURL">Image URL:</label>
         <input
           type="file"
+          name="image"
           accept="image/*"
           id="imageURL"
-          name="imageURL"
-          //   value={formData.imageURL}
-          onChange={handleChange}
+          onChange={handleImageUpload}
         />
-        {imagePreview && (
+        {preview && (
           <div>
             <h4>Image Preview:</h4>
-            <Image src={imagePreview} alt="Preview" width={100} height={100} />
+            <Image
+              src={preview as string | StaticImport}
+              alt="Preview"
+              width={100}
+              height={100}
+            />
           </div>
         )}
       </div>

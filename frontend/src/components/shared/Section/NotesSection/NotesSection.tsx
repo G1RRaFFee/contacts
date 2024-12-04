@@ -2,7 +2,7 @@
 
 import { FC } from "react";
 import { NotesNavbar } from "@/components/shared";
-import styles from "./NotesSection.module.scss";
+import styles from "./NotesSection.module.css";
 
 interface NotesSection {
   notes: string[] | undefined;

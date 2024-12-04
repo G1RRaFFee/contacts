@@ -1,5 +1,5 @@
 import { FC } from "react";
-import styles from "./NotesNavbar.module.scss";
+import styles from "./NotesNavbar.module.css";
 
 export const NotesNavbar: FC = () => {
   return (

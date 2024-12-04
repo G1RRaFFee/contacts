@@ -1,22 +1,19 @@
 .list {
   height: 100%;
   padding: 0.5rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   scrollbar-width: thin;
   scroll-behavior: smooth;
-  & > :not(:first-child) {
-    margin-top: 0.5rem;
-  }
-  .tempItem {
-    padding: 0.5rem 0.5rem 3rem 0.5rem;
-    background-color: red;
-  }
+
   .item {
     background-color: grey;
-    padding: 0.5rem;
-
+    &:hover {
+      background-color: rgb(51, 51, 51);
+    }
     .link {
       display: block;
+      padding: 0.5rem;
+
       .tags {
         display: flex;
         gap: 0.5rem;

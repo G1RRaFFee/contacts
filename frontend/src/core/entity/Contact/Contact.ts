@@ -1,4 +1,7 @@
+// FIXME: "Переписать сохраниение пути к картинки, через Readonly"
+
 export class Contact {
+  public imageUrl: string | undefined;
   constructor(
     readonly id: string,
     readonly name: string,
@@ -11,6 +14,8 @@ export class Contact {
     readonly notes?: string[],
     readonly tags?: string[],
     readonly groups?: string[],
-    readonly imageUrl?: string
-  ) {}
+    imageUrl?: string
+  ) {
+    this.imageUrl = imageUrl;
+  }
 }

@@ -1,28 +1,36 @@
-"use client";
+import { FC } from "react";
 
-import { FC, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Plus, Bell, Share } from "lucide-react";
 
-import styles from "./ContactNavbar.module.scss";
+import styles from "./ContactNavbar.module.css";
 
-export const ContactNavbar: FC = () => {
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const router = useRouter();
+interface ContactNavbarProps {
+  handleCreate: () => void;
+  handleEdit: () => void;
+  onNotification?: () => void;
+  onShare?: () => void;
+}
 
-  const handleOnAdd = () => {
-    router.push("/contact/new");
-  };
-
-  const handleOnUpdate = () => {
-    setIsEdit(true);
-  };
-
+export const ContactNavbar: FC<ContactNavbarProps> = ({
+  handleCreate,
+  handleEdit,
+}) => {
   return (
-    <nav className={styles.contactNavbar}>
-      <button onClick={handleOnAdd}>Добавить</button>
-      <button onClick={handleOnUpdate}>Изменить</button>
-      <button>Уведомления</button>
-      <button>Поделиться</button>
+    <nav className={styles.navbar}>
+      <button className={styles.createButton} onClick={handleCreate}>
+        <Plus size={16} />
+      </button>
+      <div className={styles.wrapper}>
+        <button className={styles.editButton} onClick={handleEdit}>
+          Изменить
+        </button>
+        <button className={styles.notificationButton}>
+          <Bell size={16} />
+        </button>
+        <button className={styles.shareButton}>
+          <Share size={16} />
+        </button>
+      </div>
     </nav>
   );
 };

@@ -31,7 +31,7 @@ const useContactStore = create<ContactStore>((set) => {
     },
     deleteContact: async (id: string) => {
       try {
-        await controller.delete(id); // Удаляем контакт по id
+        await controller.delete(id);
         set((state) => ({
           contacts: state.contacts
             ? state.contacts.filter((contact) => contact.id !== id)

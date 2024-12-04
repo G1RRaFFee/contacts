@@ -7,4 +7,11 @@ export interface ContactRepository {
   findAll: () => Promise<Contact[]>;
   update: (id: string, dto: UpdateContactDto) => Promise<void>;
   delete: (id: string) => Promise<void>;
+  getImagesById: (id: string) => Promise<{ name: string; data: string } | null>;
+  saveImage: (
+    id: string,
+    imageData: Buffer,
+    extension: string | "png"
+  ) => Promise<string>;
+  linkImageToContact: (id: string, imagePath: string) => Promise<void>;
 }

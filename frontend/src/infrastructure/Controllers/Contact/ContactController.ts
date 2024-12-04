@@ -1,7 +1,7 @@
 // import { Contact } from "@/core/entity/Contact/Contact";
 import { injectable } from "inversify";
 
-import { ContactService } from "@/core/service/ContactService/ContactService";
+import { ContactService } from "@/core/service/ContactService/Contact.service";
 import { Contact } from "@/core/entity/Contact/Contact";
 
 @injectable()
@@ -38,6 +38,17 @@ export class ContactController {
     }
   }
 
+  public async update(id: string, updatedContact: Contact): Promise<void> {
+    try {
+      return await this.service.update(id, updatedContact);
+    } catch (error) {
+      console.error(
+        "Ошибка при получении контакта (ContactController | getById):",
+        error
+      );
+    }
+  }
+
   public async delete(id: string): Promise<void> {
     try {
       await this.service.delete(id);
@@ -47,15 +58,38 @@ export class ContactController {
     }
   }
 
+  public async getImageById(id: string) {
+    try {
+      return await this.service.getImageById(id);
+    } catch (error) {
+      console.error(
+        "Ошибка при получении изображения контакта (ContactController | getImageById):",
+        error
+      );
+    }
+  }
+
+  public async saveImage(
+    id: string,
+    imageData: Buffer,
+    extension: string | "png"
+  ) {
+    try {
+      return await this.service.saveImage(id, imageData, extension);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  public async linkImagetoContact(id: string, imagePath: string) {
+    try {
+      await this.service.linkImageToContact(id, imagePath);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   public generateId(): string {
     return this.service.generateId();
   }
-  //   public async update(id: string, contact: Contact): Promise<void> {
-  //     try {
-  //       await this.service.update(id, contact);
-  //       console.log("Contact updated");
-  //     } catch (error) {
-  //       console.error("Error updating contact:", error);
-  //     }
-  //   }
 }

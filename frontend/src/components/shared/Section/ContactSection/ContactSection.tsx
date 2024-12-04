@@ -2,46 +2,52 @@
 
 import { Contact } from "@/core/entity/Contact/Contact";
 import { FC, useState } from "react";
-import { ContactNavbar } from "@/components/shared";
-import styles from "./ContactSection.module.scss";
+import { ContactEdit, ContactPreview } from "@/components/shared";
+import { container } from "@/infrastructure/Di/Container.config";
+import { ContactController } from "@/infrastructure/Controllers/Contact/ContactController";
+import styles from "./ContactSection.module.css";
 
 interface ContactSectionProps {
   contact: Contact | undefined;
+  onFetch: () => Promise<void>;
 }
 
-export const ContactSection: FC<ContactSectionProps> = ({ contact }) => {
+export const ContactSection: FC<ContactSectionProps> = ({
+  contact,
+  onFetch,
+}) => {
+  const controller = container.get<ContactController>(ContactController);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const handleSave = (updatedContact: Contact) => {
-    // setContact(updatedContact);
-    // через контроллер апдейтить контакт.
-    setIsEditing(false);
+  const handleSave = async (updatedContact: Contact) => {
+    try {
+      await controller.update(updatedContact.id, updatedContact);
+      await onFetch();
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Ошибка при сохранении контакта:", error);
+    }
   };
 
   const handleCancel = () => {
     setIsEditing(false);
   };
-  return contact ? (
-    <section className={styles.contactSection}>
-      <ul>
-        {Object.entries(contact).map(
-          ([key, value]) =>
-            key !== "notes" &&
-            key !== "id" && (
-              <li key={key}>
-                <strong style={{ fontWeight: "bold" }}>{key}</strong>:{" "}
-                <i style={{ fontStyle: "italic" }}>{String(value)}</i>
-              </li>
-            )
-        )}
-      </ul>
-      <ContactNavbar />
+
+  return (
+    <section className={styles.section}>
+      {isEditing ? (
+        <ContactEdit
+          contact={contact as Contact}
+          onSave={handleSave}
+          onCancel={handleCancel}
+        />
+      ) : (
+        <ContactPreview contact={contact as Contact} onEdit={handleEdit} />
+      )}
     </section>
-  ) : (
-    <p>No contact information available.</p>
   );
 };

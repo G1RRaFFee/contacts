@@ -1,5 +1,11 @@
+"use client";
+
 import { Contact } from "@/core/entity/Contact/Contact";
-import { FC } from "react";
+import { FC, useState } from "react";
+import Form from "next/form";
+import { EditContactNavbar } from "@/components/shared";
+import useContactStore from "@/store/contact/contact.store";
+import { useRouter } from "next/navigation";
 
 interface ContactEditProps {
   contact: Contact;
@@ -12,7 +18,9 @@ export const ContactEdit: FC<ContactEditProps> = ({
   onSave,
   onCancel,
 }) => {
+  const { deleteContact } = useContactStore();
   const [formData, setFormData] = useState<Contact>({ ...contact });
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -23,13 +31,17 @@ export const ContactEdit: FC<ContactEditProps> = ({
     onSave(formData);
   };
 
+  const handleDelete = () => {
+    router.push("/");
+    deleteContact(formData.id);
+  };
+
   return (
     <section>
-      <h2>Edit Contact</h2>
-      <form>
+      <Form action={handleSave} id="ContactForm">
         {Object.entries(formData).map(([key, value]) =>
-          key !== "id" ? (
-            <div key={key}>
+          key !== "id" && key !== "notes" ? (
+            <p key={key}>
               <label>
                 {key}:
                 <input
@@ -39,12 +51,11 @@ export const ContactEdit: FC<ContactEditProps> = ({
                   onChange={handleChange}
                 />
               </label>
-            </div>
+            </p>
           ) : null
         )}
-      </form>
-      <button onClick={handleSave}>Save</button>
-      <button onClick={onCancel}>Cancel</button>
+      </Form>
+      <EditContactNavbar onCancel={onCancel} onDelete={handleDelete} />
     </section>
   );
 };

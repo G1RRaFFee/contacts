@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import styles from "./Footer.module.scss";
+import styles from "./Footer.module.css";
 
 interface Footer {
   children: ReactNode;
