@@ -16,26 +16,12 @@ export class ContactController {
     }
   }
 
-  public async getAll(): Promise<Contact[] | undefined> {
-    try {
-      return await this.service.getAll();
-    } catch (error) {
-      console.error(
-        "Ошибка при получении контактов (ContactController | getAll):",
-        error
-      );
-    }
+  public async getAll(): Promise<Contact[]> {
+    return await this.service.getAll();
   }
 
-  public async getById(id: string): Promise<Contact | undefined> {
-    try {
-      return await this.service.findById(id);
-    } catch (error) {
-      console.error(
-        "Ошибка при получении контакта (ContactController | getById):",
-        error
-      );
-    }
+  public async getById(id: string) {
+    return await this.service.findById(id);
   }
 
   public async update(id: string, updatedContact: Contact): Promise<void> {

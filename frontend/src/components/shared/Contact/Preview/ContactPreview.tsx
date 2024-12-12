@@ -1,14 +1,13 @@
 "use client";
 
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Contact } from "@/core/entity/Contact/Contact";
-import { ContactNavbar } from "@/components/shared";
+import { ContactNavbar, Description } from "@/components/shared";
 import { useRouter } from "next/navigation";
-import Image, { StaticImageData } from "next/image";
 import styles from "./Preview.module.css";
 import { container } from "@/infrastructure/Di/Container.config";
 import { ContactController } from "@/infrastructure/Controllers/Contact/ContactController";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import useDescriptionStore from "@/store/contact/description/description.store";
 
 interface ContactPreviewProps {
   contact: Contact;
@@ -22,6 +21,7 @@ export const ContactPreview: FC<ContactPreviewProps> = ({
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const router = useRouter();
   const controller = container.get<ContactController>(ContactController);
+  const { description, toggleDescription } = useDescriptionStore();
 
   const handleCreate = () => {
     router.push("/contact/new");
@@ -30,7 +30,6 @@ export const ContactPreview: FC<ContactPreviewProps> = ({
   const fetchImage = async () => {
     try {
       const response = await controller.getImageById(contact.id);
-      console.log(response);
       if (!response || !response.data) return;
       const mimeType = "image/png/jpg/jpeg";
       const imageUrl = `data:${mimeType};base64,${response.data}`;
@@ -60,20 +59,10 @@ export const ContactPreview: FC<ContactPreviewProps> = ({
             />
           )}
           <div className={styles.wrapper}>
-            <div className={styles.title}>{contact.name}</div>
-            <div className={styles.grid}>
-              {Object.entries(contact).map(
-                ([key, value], index) =>
-                  key !== "name" &&
-                  key !== "id" &&
-                  key !== "notes" && (
-                    <Fragment key={index}>
-                      <div className={styles.item}>{key}</div>
-                      <div className={styles.value}>{value}</div>
-                    </Fragment>
-                  )
-              )}
+            <div className={styles.title} onClick={toggleDescription}>
+              {contact.name}
             </div>
+            {description && <Description contact={contact} />}
           </div>
           <ContactNavbar handleCreate={handleCreate} handleEdit={onEdit} />
         </>

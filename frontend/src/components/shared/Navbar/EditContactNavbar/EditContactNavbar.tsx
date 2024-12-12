@@ -4,7 +4,7 @@ import styles from "./EditContactNavbar.module.css";
 interface EditContactNavbarProps {
   onSubmit?: () => void;
   onCancel: () => void;
-  onDelete: (id: string) => void;
+  onDelete: any;
 }
 
 export const EditContactNavbar: FC<EditContactNavbarProps> = ({

@@ -7,11 +7,8 @@ import {
   writeFile,
 } from "@tauri-apps/plugin-fs";
 
-import { v4 as uuidv4 } from "uuid";
-
 import { Contact } from "@/core/entity/Contact/Contact";
 import { ContactRepository } from "@/core/repository/ContactRepository/ContactRepository";
-import { UpdateContactDto } from "@/core/repository/ContactRepository/dto/UpdateContactDto";
 
 import { JsonContactsData } from "@/infrastructure/Repositories/Types/ContactTypes";
 import { injectable } from "inversify";
@@ -42,7 +39,7 @@ export class JsonContactRepository implements ContactRepository {
     return data ? data.contacts : [];
   }
 
-  public async update(id: string, dto: UpdateContactDto): Promise<void> {
+  public async update(id: string, dto: Contact): Promise<void> {
     const data = await this.load();
     if (!data)
       throw new Error("Ошибка при загрузке данных, возможен undefined.");
@@ -144,10 +141,12 @@ export class JsonContactRepository implements ContactRepository {
 
   private async load(): Promise<JsonContactsData | undefined> {
     try {
-      const data = await readTextFile(this.filePath, {
+      const data = await readTextFile("Contacts/contacts.json", {
         baseDir: BaseDirectory.Download,
       });
-      const parsedData = JSON.parse(data);
+      const parsedData = JSON.parse(
+        new TextDecoder().decode(data as unknown as undefined)
+      );
       return {
         amount: parsedData.amount,
         contacts: parsedData.contacts,

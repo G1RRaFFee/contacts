@@ -1,19 +1,20 @@
-"use client";
-
 import { FC } from "react";
-import { NotesNavbar } from "@/components/shared";
+
+import { NotesList } from "@/components/shared";
 import styles from "./NotesSection.module.css";
 
-interface NotesSection {
-  notes: string[] | undefined;
-}
+interface NotesSectionProps {}
 
-export const NotesSection: FC<NotesSection> = ({ notes }) => {
+export const NotesSection: FC<NotesSectionProps> = () => {
   return (
-    <section className={styles.notesSection}>
-      <p>Заметки</p>
-      <ul>{notes && notes.map((note, key) => <li key={key}>{note}</li>)}</ul>
-      <NotesNavbar />
+    <section className={styles.section}>
+      <h2 style={{ fontSize: "20px", fontWeight: "600" }}>Заметки</h2>
+      <NotesList />
     </section>
+    // <section className={styles.notesSection}>
+    // Title
+    // NotesList
+    // ToolBar
+    // </section>
   );
 };

@@ -33,7 +33,6 @@ export class ContactService {
 
   public async getImageById(id: string) {
     const response = this.contactRepository.getImagesById(id);
-    console.log("Сервис:", response);
     return response;
   }
 

@@ -6,19 +6,19 @@ import useContactStore from "@/store/contact/contact.store";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import { Contact } from "@/core/entity/Contact/Contact";
 
-type FormData = {
+interface FormData {
   id: string;
   name: string;
-  email?: string;
-  address?: string;
-  phone?: string;
-  website?: string;
-  company?: string;
-  birthday?: string;
-  imageURL?: string;
-};
+  email: string;
+  address: string;
+  phone: string;
+  website: string;
+  company: string;
+  birthday: string;
+  imageURL: string;
+}
 
 export default function Page() {
   const controller = container.get<ContactController>(ContactController);
@@ -77,7 +77,7 @@ export default function Page() {
         Buffer.from(imageData),
         extension
       );
-      return path; // Возвращаем путь к сохраненному изображению
+      return path as string | null; // Возвращаем путь к сохраненному изображению
     } catch (error) {
       console.error("Failed to save image:", error);
       return null;
@@ -106,7 +106,7 @@ export default function Page() {
       };
 
       console.log("Form submitted with data:", contactData);
-      createContact(contactData);
+      createContact(contactData as any);
       router.push(`/contact/${formData.id}`);
     }
   };
@@ -216,7 +216,7 @@ export default function Page() {
           <div>
             <h4>Image Preview:</h4>
             <Image
-              src={preview as string | StaticImport}
+              src={preview as string}
               alt="Preview"
               width={100}
               height={100}

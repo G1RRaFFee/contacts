@@ -1,15 +1,19 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
-import { NotesSection, ContactSection } from "@/components/shared";
+import { FC, Suspense, use, useEffect, useState } from "react";
 import { container } from "@/infrastructure/Di/Container.config";
 import { ContactController } from "@/infrastructure/Controllers/Contact/ContactController";
 import { Contact } from "@/core/entity/Contact/Contact";
+import { NotesSection, ContactSection } from "@/components/shared";
 import styles from "./page.module.css";
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
+export default function ContactPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = use(params);
-  const [contact, setContact] = useState<Contact | undefined>(undefined);
+  const [contact, setContact] = useState<Contact>();
   const controller = container.get<ContactController>(ContactController);
 
   const fetchContact = async () => {
@@ -23,8 +27,20 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <main className={styles.pageMain}>
-      <ContactSection contact={contact} onFetch={fetchContact} />
-      {/* <NotesSection notes={contact?.notes} /> */}
+      <Suspense fallback={<Loading />}>
+        {contact ? (
+          <>
+            <ContactSection initialContact={contact} />
+            <NotesSection />
+          </>
+        ) : (
+          <Loading />
+        )}
+      </Suspense>
     </main>
   );
 }
+
+const Loading: FC = () => {
+  return <p>Loading section...</p>;
+};

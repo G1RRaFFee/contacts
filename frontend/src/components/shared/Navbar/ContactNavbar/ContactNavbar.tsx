@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Plus, Bell, Share } from "lucide-react";
+import { Plus, Bell, Share, UserRoundPen } from "lucide-react";
 
 import styles from "./ContactNavbar.module.css";
 
@@ -17,18 +17,18 @@ export const ContactNavbar: FC<ContactNavbarProps> = ({
 }) => {
   return (
     <nav className={styles.navbar}>
-      <button className={styles.createButton} onClick={handleCreate}>
-        <Plus size={16} />
+      <button className={styles.button} onClick={handleCreate}>
+        <Plus size={20} />
       </button>
       <div className={styles.wrapper}>
-        <button className={styles.editButton} onClick={handleEdit}>
-          Изменить
+        <button className={styles.button} onClick={handleEdit}>
+          <UserRoundPen size={20} />
         </button>
-        <button className={styles.notificationButton}>
-          <Bell size={16} />
+        <button className={styles.button}>
+          <Bell size={20} />
         </button>
-        <button className={styles.shareButton}>
-          <Share size={16} />
+        <button className={styles.button}>
+          <Share size={20} />
         </button>
       </div>
     </nav>
