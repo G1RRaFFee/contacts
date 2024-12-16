@@ -43,7 +43,7 @@ export const NotesList: FC = () => {
         ))}
       </div>
       <nav className={styles.notesToolbar}>
-        <button onClick={addNote} className={styles.createButton}>
+        <button onClick={addNote} className={styles.button}>
           <Plus size={16} />
         </button>
       </nav>

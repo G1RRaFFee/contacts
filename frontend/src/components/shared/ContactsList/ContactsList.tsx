@@ -9,7 +9,7 @@ export const ContactsList: FC = () => {
 
   useEffect(() => {
     fetchContacts();
-  }, [fetchContacts]);
+  }, []);
   return (
     <SideBar>
       {/* <Search /> */}

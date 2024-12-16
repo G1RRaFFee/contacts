@@ -1,5 +1,7 @@
 .section {
   position: relative;
   width: 40%;
-  margin: 0.5rem;
+  /* margin: 0 0.5rem; */
+  border-radius: 0.5rem 0.5rem 0 0;
+  /* background-color: #272727; */
 }
